@@ -1,1 +1,1 @@
-web: npm start strapi
+web: yarn build

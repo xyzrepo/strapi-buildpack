@@ -1,14 +1,18 @@
-ARG BASE_VERSION
-FROM strapi/base:${BASE_VERSION}
-
-ARG STRAPI_VERSION
-RUN yarn global add strapi@${STRAPI_VERSION}
+FROM strapi/base
 
 WORKDIR /srv/app
 
-VOLUME /srv/app
+COPY ./package.json ./
+COPY ./yarn.lock ./
 
-COPY docker-entrypoint.sh /usr/local/bin/
-ENTRYPOINT ["docker-entrypoint.sh"]
+RUN yarn install
 
-CMD ["strapi", "develop"]
+COPY . .
+
+RUN yarn build
+
+EXPOSE 1337
+
+ENV NODE_ENV production
+
+CMD ["yarn", "start"]
